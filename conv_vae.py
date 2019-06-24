@@ -12,8 +12,8 @@ class ConvVAE(object):
 		self.batch_size = batch_size
 
 		# placeholder for input images. Input images are RGB 64x64
-		self.input_images = tf.placeholder(tf.float32, [None, 64, 64, 3])
-		input_images_flat = tf.reshape(self.input_images, [-1, 64*64*3])
+		self.input_images = tf.placeholder(tf.float32, [None, 144, 256, 3])
+		input_images_flat = tf.reshape(self.input_images, [-1, 144*256*3])
 
 		# placeholder for z_samples. We are using this placeholder when we are generating new images
 		self.z_samples = tf.placeholder(tf.float32, [None, self.latent_dim])
@@ -28,7 +28,7 @@ class ConvVAE(object):
 		# decoder
 		self.generated_images = self.decoder(z)
 		self.generated_images_sigmoid = tf.sigmoid(self.generated_images)
-		generated_images_flat = tf.reshape(self.generated_images, [-1, 64*64*3])
+		generated_images_flat = tf.reshape(self.generated_images, [-1, 144*256*3])
 		
 		# let's calculate the loss
 		'''
@@ -51,7 +51,7 @@ class ConvVAE(object):
 
 
 	def encoder(self):
-		# first convolutional layer 64x64x3 -> 32x32x16
+		# first convolutional layer 144x256x3 -> 32x32x16
 		h1 = tf.nn.relu(conv2d(self.input_images, 3, 16, 'conv1'))
 
 		# second convolutional layer 32x32x16 -> 16x16x32
@@ -73,7 +73,7 @@ class ConvVAE(object):
 		h1 = tf.nn.relu(deconv2d(z_matrix, [self.batch_size, 32, 32, 16], 'deconv1', reuse))
 
 		# second deconvolutional layer 32x32x16 -> 64x64x3
-		h2 = deconv2d(h1, [self.batch_size, 64, 64, 3], 'deconv2', reuse)
+		h2 = deconv2d(h1, [self.batch_size, 144, 256, 3], 'deconv2', reuse)
 
 		return activation(h2)
 
@@ -108,5 +108,5 @@ if __name__ == '__main__':
 		output_frame = output_frame * 255
 		output_frame = output_frame.astype(np.uint8)
 		print 'Shape= ', output_frame.shape
-		plt.imshow(np.reshape(output_frame, [64, 64, 3]))
+		plt.imshow(np.reshape(output_frame, [144, 256, 3]))
 		plt.show()
