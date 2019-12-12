@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 
 
 class ConvVAE(object):
-    '''Convolutional variational autoencoder'''
+    """ Convolutional variational autoencoder """
 
     def __init__(self, latent_dim, batch_size=64):
         self.latent_dim = latent_dim
@@ -38,10 +38,8 @@ class ConvVAE(object):
         self.generated_images_sigmoid = tf.sigmoid(self.generated_images)
         generated_images_flat = tf.reshape(self.generated_images, [-1, 144 * 256 * 3])
 
-        # let's calculate the loss
-        '''
-		self.generation_loss = -tf.reduce_sum(input_images_flat * tf.log(1e-8 + generated_images_flat)\
-										 + (1 - input_images_flat) * tf.log(1e-8 + 1 - generated_images_flat), 1)'''
+        # let's calculate the loss self.generation_loss = -tf.reduce_sum(input_images_flat * tf.log(1e-8 +
+        # generated_images_flat)+ (1 - input_images_flat) * tf.log(1e-8 + 1 - generated_images_flat), 1)
 
         self.generation_loss = tf.reduce_sum(
             tf.maximum(generated_images_flat, 0) - generated_images_flat * input_images_flat \
@@ -98,11 +96,11 @@ class ConvVAE(object):
         return sess.run(self.loss, feed_dict={self.input_images: input_images})
 
     def generation_step(self, sess, z_samples):
-        '''Generates new images'''
+        """Generates new images"""
         return sess.run(self.generator, feed_dict={self.z_samples: z_samples})
 
     def recognition_step(self, sess, input_images):
-        '''Reconstruct images'''
+        """Reconstruct images"""
         return sess.run(self.generated_images_sigmoid, feed_dict={self.input_images: input_images})
 
 

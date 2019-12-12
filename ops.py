@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Date    : 2019-07-01 15:18:38
+# @Author  : mrobotor (colinzhang@applecore.cc)
+# @Link    : http://darklunar.ml
+# @Version : $Id$
+
 import tensorflow as tf
 
 
